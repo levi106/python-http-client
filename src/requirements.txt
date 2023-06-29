@@ -1,0 +1,3 @@
+requests
+opencensus-ext-azure
+opencensus-ext-requests
