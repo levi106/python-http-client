@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: python-http-client
+  name: python-http-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: python-http-client
+  template:
+    metadata:
+      labels:
+        app: python-http-client
+    spec:
+      containers:
+      - image: ghcr.io/levi106/python-http-client:main
+        name: python-http-client
+        imagePullPolicy: Always
+        env:
+        - name: REQUEST_INTERVAL_SEC
+          value: "250"
+        - name: APPLICATIONINSIGHTS_CONNECTION_STRING
+          valueFrom:
+            secretKeyRef:
+              name: ai
+              key: connectionstring
+        - name: REQUEST_URL
+          valueFrom:
+            configMapKeyRef:
+              name: request
+              key: url
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "512Mi"
+            cpu: "300m"
